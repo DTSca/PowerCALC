@@ -1,0 +1,442 @@
+<!DOCTYPE HTML>
+<html lang="en" />
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+  <meta name="description" content="PowerCOAT Calculator" />
+  <meta name="keywords" content="" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#c21b32" />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <title>PowerCOAT Calculator</title>
+
+  <!-- PWA -->
+  <link rel="manifest" href="manifest.json" />
+  <!-- ios support -->
+  <link rel="apple-touch-icon" href="favicon.svg" />
+  <meta name="apple-mobile-web-app-status-bar" content="#c21b32" />
+  <meta name="theme-color" content="#c21b32" />
+
+  <style type="text/css">
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: arial, sans-serif;
+      margin: 0;
+      text-align: center;
+    }
+    header {
+      background: white;
+//      background: hsl(353, 72%, 90%);
+//      font-weight: bold;
+    }
+    header a {
+      text-decoration: none;
+    }
+    .title {font-size: 10vw; color:white;}
+    .t-power {color: white; font-style: bold;}
+    .t-coat {color: #c21b32; background:white}
+    #input, #output, #order {
+      padding: 1em;
+    }
+    #input {
+//      background: lightsteelblue;
+//      background: hsl(173, 72%, 44%);
+      background: black;
+      color: white;
+    }
+    #input button,
+    #order button,
+    #order input {
+      margin-left: 1em;
+      padding: 0.5em;
+      background-color: lightgreen;
+      border-radius: 0.5em;
+      font-size: large;
+      font-weight: bold;
+    }
+    #output {
+//      background: lightskyblue;
+//      background: #c21b32;
+      background: hsl(352, 76%, 35%);
+      color: white;
+      display: none;
+    }
+    #output table {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #output table td {
+      text-align: left;
+      padding: 0.2em;
+      vertical-align: baseline;
+    }
+    #output #productTable tr > td:nth-child(2),
+    #output #productTable tr > td:nth-child(4) {
+      text-align: right;
+      border-left: 2px solid white;
+    }
+    #output #productTable tr > td:nth-child(4),
+    #output #productTable tr > td:nth-child(5),
+    #output #consumableTable tr > td:nth-child(2) {
+      background: white;
+      color: black;
+    }
+    #output #productTable tr > td:nth-child(4),
+    #output #consumableTable tr > td:nth-child(2),
+    #output table caption {
+      font-weight: bold;
+    }
+    #output #consumableTable tr > td:nth-child(2) {
+      text-align: right;
+    }
+    #output select {background-color: yellow;}
+    #output select option {background-color: white;}
+//    #output select[selectedIndex="1"] {background-color: yellow;}
+    #output select option:first-child {background-color: yellow;}
+    #order {
+      display: none;
+//      background: lightsteelblue;
+//      background: hsl(353, 72%, 44%);
+      background: black;
+      color: white;
+    }
+    #order input {
+      font-weight: bold;
+    }
+    footer {
+      font-size: small;
+      padding: 0.5em;
+    }
+  </style>
+
+  <script type="text/javascript">
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register('/PowerCALC/sw.js')
+      .then(() => { console.log('Service Worker Registered'); });
+  }
+  </script>
+</head>
+
+
+<body>
+
+<header>
+  <a href="https://www.powercoatcanada.com/" ><img src="PowerCALC Logo.svg" alt="PowerCALC Logo" style="width:60vw; max-width:900px;"/></a>
+</header>
+
+
+<main>
+  <section id="input">
+    <p style="display: inline-block; text-align: left;">
+      <input type="radio" id="appType-dec" name="appType" value="decorative" checked />
+      <label for="appType-dec">Decorative Chip</label><br>
+      <input type="radio" id="appType-epoxy" name="appType" value="epoxy" />
+      <label for="appType-epoxy">Epoxy Metallic</label><br>
+      <input type="radio" id="appType-quartz" name="appType" value="quartz" />
+      <label for="appType-quartz">Exterior Quartz on Concrete</label>
+    </p>
+
+    <p>
+      <label for="area">Area:</label>
+      <input type="number" id="area" name="area" min="1" max="50000" size="5" /> ft<sup>2</sup>
+      <button onclick="calc()">Go</button>
+    </p>
+  </section>
+
+  <section id="output">
+    <h2 id="outputTitle"></h2>
+    <p><table id="productTable" cellspacing="0">
+      <tr><th></th><th colspan="2">Qty Needed</th><th colspan="2">Product Needed</th></tr>
+      <tr><td id="r1-title"></td>
+          <td id="r1-qty"></td>
+          <td id="r1-q-unit"></td>
+          <td id="r1-prod"></td>
+          <td id="r1-p-unit"></td></tr>
+      <tr><td id="r2-title"></td>
+          <td id="r2-qty"></td>
+          <td id="r2-q-unit"></td>
+          <td id="r2-prod"></td>
+          <td id="r2-p-unit"><select id='color1'></select></td></tr>
+      <tr><td id="r3-title"></td>
+          <td id="r3-qty"></td>
+          <td id="r3-q-unit"></td>
+          <td id="r3-prod"></td>
+          <td id="r3-p-unit"><select id='color2'></select></td></tr>
+      <tr><td id="r4-title"></td>
+          <td id="r4-qty"></td>
+          <td id="r4-q-unit"></td>
+          <td id="r4-prod"></td>
+          <td id="r4-p-unit"></td></tr>
+      <tr id="row5"><td id="r5-title"></td>
+          <td id="r5-qty"></td>
+          <td id="r5-q-unit"></td>
+          <td id="r5-prod"></td>
+          <td id="r5-p-unit"></td></tr>
+    </table>
+    <p><table id="consumableTable" cellspacing="0">
+      <caption>Consumables needed for application</caption>
+      <tr><td>Roller Cage (18")</td><td id="csm-cage"></td></tr>
+      <tr><td>Rollers</td>          <td id="csm-rol"></td></tr>
+      <tr><td>End Caps</td>         <td id="csm-cap"></td></tr>
+      <tr><td>2" Brush</td>         <td id="csm-br"></td></tr>
+      <tr><td>Mixer</td>            <td id="csm-mix"></td></tr>
+      <tr><td>Squeegee</td>         <td id="csm-sqg"></td></tr>
+      <tr><td>Nitrile Gloves</td>   <td id="csm-glv"></td></tr>
+      <tr id="scraperRow"><td>Scraper</td> <td id="csm-scr"></td></tr>
+    </table>
+  </section>
+
+  <section id="order">
+    <a id="emailBtn" href=""><button onclick="composeMessage()">Email Order</button></a>
+  </section>
+
+</main>
+
+
+<footer>
+  <p style="float: left;">Version 0.1
+  <p style="float: right;">Copyright &copy; 2021 PowerCOAT Canada
+</footer>
+
+
+<script type="text/javascript">
+var colorsEpoxyTint = ['Choose Tint:','Almond','Black','Charcoal','Light Grey','Medium Grey','Pale Grey','Pure Grey',
+  'Safety Blue','Safety Orange','Safety Red','Safety Yellow','Silver','Steel Grey','White'];
+var colorsChips = ['Choose Chips:','Basalt - F9309','Bean - FB960','Black - F1050','Blue - F6604','Cabin Fever - FB127',
+  'Camel - FB413','Domino - FB411','Granite - F1410','Gravel - FB414','Lime - F5102','Madras - FB706','Nightfall - FB715',
+  'Obsidian - F9903','Online - F9903','Orange - F2160','Orbit - FB310','Outback - FB517','Pumice - F9303','Red - F2240',
+  'Schist - F9307','Stonehenge - FB427','Tomato - F9978','White - F1820','Wombat - FB616','Yellow - F2200'];
+var colorsQuartz = ['Choose Quartz:','Beige','Black','Blue','Brown','Charcoal','Clear','Red','Tan','White','Yellow',
+  'Aquarium QB-1017','Avocado QB-1022','Biscuit QB-1013','Breaking Dawn QB-1011','Cinnamon QB-1023',
+  'Clearwater QB-1020','Coconut QB-1012','Crystal QB-1001','Dalmatian QB-1007','Davenport QB-1014','Driftwood QB-1015',
+  'Eclipse QB-1008','Firehouse QB-1024','Marina QB-1019','Matrix QB-1009','Mossy Oak QB-1021','New Moon QB-1018',
+  'Oxford QB-1005','Oyster QB-1004','Quicksand QB-1006','Ruby QB-1025','Solstice QB-1003','Tradewinds QB-1016',
+  'Tundra QB-1002','Twilight QB-1010'];
+var colorsMetallic = ['Choose Pigments:','Aztec Gold','Black Grey','Black Pearl','Black Pearl Ice','Blue Pearl',
+  'Bright Blue','Bright Red','Bright White','Bronze','Bronze Brown','Chestnut Brown','Coffee','Copper Brown',
+  'Deep Brown','Flash Brown','Flash Gold','Flash Silver','Flash White','Fresh Green','Glitter White','Gold Blue',
+  'Luster Brown','Magic Orange','Mocha','Ocean Blue','Peacock Green','Rainbow Blue Ice','Red Brown','Satin Bronze',
+  'Satin Coffee','Satin Grey','Satin Red Brown','Satin White Grey','Silver Black','Silver Grey','Silver Pearl',
+  'Sparkle Pearl','Ultra Sparkle White','Violet'];
+var i, area;
+
+function listColors(list, field) {
+  while (document.getElementById(field).options.length)
+    document.getElementById(field).remove(0);
+
+  for (i=0;i<list.length;i++) {
+    var option = new Option(list[i]);
+    document.getElementById(field).options.add(option);
+  } // for
+} // function listColors
+
+function calc() {
+  area = document.querySelector("input[name=area]").value;
+
+  switch(document.querySelector("input[name=appType]:checked").value) {
+  	case "decorative":
+  	  document.getElementById("outputTitle").innerHTML = "Decorative Chip";
+      document.getElementById("r1-title").innerHTML  = "Epoxy Base";
+      document.getElementById("r1-qty").innerHTML    = Math.ceil(area/166.667);
+      document.getElementById("r1-q-unit").innerHTML = "gal";
+      document.getElementById("r1-prod").innerHTML   = Math.ceil(Math.ceil(area/166.667)/3);
+      document.getElementById("r1-p-unit").innerHTML = "Kits (3 Gallon Kit)";
+      document.getElementById("r2-title").innerHTML  = "Epoxy Tint";
+      document.getElementById("r2-qty").innerHTML    = Math.ceil(Math.ceil(area/166.667)/3);
+      document.getElementById("r2-q-unit").innerHTML = "qt";
+      document.getElementById("r2-prod").innerHTML   = Math.ceil(Math.ceil(area/166.667)/3);
+      document.getElementById("r2-p-unit").innerHTML = "qt <select id='color1' onChange='this.style.backgroundColor=(this.selectedIndex)?\"white\":\"yellow\";'></select>";
+      document.getElementById("r3-title").innerHTML  = "Chips";
+      document.getElementById("r3-qty").innerHTML    = (area/10);
+      document.getElementById("r3-q-unit").innerHTML = "lb";
+      document.getElementById("r3-prod").innerHTML   = (area/10);
+      document.getElementById("r3-p-unit").innerHTML = "lb <select id='color2' onChange='this.style.backgroundColor=(this.selectedIndex)?\"white\":\"yellow\";'></select>";
+      document.getElementById("r4-title").innerHTML  = "Polyaspartic";
+      document.getElementById("r4-qty").innerHTML    = Math.ceil(area/120);
+      document.getElementById("r4-q-unit").innerHTML = "gal";
+      document.getElementById("r4-prod").innerHTML   = Math.ceil(Math.ceil(area/120)/2);
+      document.getElementById("r4-p-unit").innerHTML = "Kits (2 Gallon Kit)";
+      document.getElementById("r5-title").innerHTML  = "";
+      document.getElementById("r5-qty").innerHTML    = "";
+      document.getElementById("r5-q-unit").innerHTML = "";
+      document.getElementById("r5-prod").innerHTML   = "";
+      document.getElementById("r5-p-unit").innerHTML = "";
+      document.getElementById("row5").style.display = "none";
+      document.getElementById("csm-cage").innerHTML = "1";
+      document.getElementById("csm-rol").innerHTML  = "2";
+      document.getElementById("csm-cap").innerHTML  = "2";
+      document.getElementById("csm-br").innerHTML   = "4";
+      document.getElementById("csm-mix").innerHTML  = "1";
+      document.getElementById("csm-sqg").innerHTML  = "1";
+      document.getElementById("csm-glv").innerHTML  = "8";
+      document.getElementById("csm-scr").innerHTML  = "1";
+      document.getElementById("scraperRow").style.display = "table-row";
+
+      listColors(colorsEpoxyTint, "color1");
+      listColors(colorsChips, "color2");
+      break; // decorative chips
+  	case "epoxy":
+  	  document.getElementById("outputTitle").innerHTML = "Epoxy Metallic";
+      document.getElementById("r1-title").innerHTML  = "Epoxy Base";
+      document.getElementById("r1-qty").innerHTML    = Math.ceil(area/166.667);
+      document.getElementById("r1-q-unit").innerHTML = "gal";
+      document.getElementById("r1-prod").innerHTML   = Math.ceil(Math.ceil(area/166.667)/3);
+      document.getElementById("r1-p-unit").innerHTML = "Kits (3 Gallon Kit)";
+      document.getElementById("r2-title").innerHTML  = "Epoxy Tint";
+      document.getElementById("r2-qty").innerHTML    = Math.ceil(Math.ceil(area/166.667)/3);
+      document.getElementById("r2-q-unit").innerHTML = "qt";
+      document.getElementById("r2-prod").innerHTML   = Math.ceil(Math.ceil(area/166.667)/3);
+      document.getElementById("r2-p-unit").innerHTML = "qt <select id='color1' onChange='this.style.backgroundColor=(this.selectedIndex)?\"white\":\"yellow\";'></select>";
+      document.getElementById("r3-title").innerHTML  = "Metallic Pigments";
+      document.getElementById("r3-qty").innerHTML    = Math.ceil(Math.ceil(area/45)/3)*8;
+      document.getElementById("r3-q-unit").innerHTML = "oz";
+      document.getElementById("r3-prod").innerHTML   = Math.ceil(Math.ceil(area/45)/3);
+      document.getElementById("r3-p-unit").innerHTML = "8oz Bottles <select id='color2' title='Hold Ctrl to select multiple' multiple onChange='this.style.backgroundColor=\"yellow\";'></select>";
+//      document.getElementById("r3-p-unit").innerHTML = "8oz Bottles <select id='color2' multiple onChange='this.style.backgroundColor=(this.selectedIndex==\"-1\")?\"white\":\"yellow\";'></select><button onclick=alert(document.getElementById(\"color2\").selectedIndex)>a</button>";
+      document.getElementById("r4-title").innerHTML  = "LVX";
+      document.getElementById("r4-qty").innerHTML    = Math.ceil(area/45);
+      document.getElementById("r4-q-unit").innerHTML = "gal";
+      document.getElementById("r4-prod").innerHTML   = Math.ceil(Math.ceil(area/45)/3);
+      document.getElementById("r4-p-unit").innerHTML = "Kits (3 Gallon Kit)";
+      document.getElementById("r5-title").innerHTML  = "Urethane Clearcoat";
+      document.getElementById("r5-qty").innerHTML    = Math.ceil(area/600);
+      document.getElementById("r5-q-unit").innerHTML = "gal";
+      document.getElementById("r5-prod").innerHTML   = Math.ceil(area/600);
+      document.getElementById("r5-p-unit").innerHTML = "Kits (Part A and B)";
+      document.getElementById("row5").style.display = "table-row";
+      document.getElementById("csm-cage").innerHTML = "1";
+      document.getElementById("csm-rol").innerHTML  = "3";
+      document.getElementById("csm-cap").innerHTML  = "4";
+      document.getElementById("csm-br").innerHTML   = "6";
+      document.getElementById("csm-mix").innerHTML  = "1";
+      document.getElementById("csm-sqg").innerHTML  = "1";
+      document.getElementById("csm-glv").innerHTML  = "12";
+      document.getElementById("csm-scr").innerHTML  = "0";
+      document.getElementById("scraperRow").style.display = "none";
+
+      listColors(colorsEpoxyTint, "color1");
+      listColors(colorsMetallic, "color2");
+  	  break; // epoxy metallic
+  	case "quartz":
+  	  document.getElementById("outputTitle").innerHTML = "Exterior Quartz on Concrete";
+      document.getElementById("r1-title").innerHTML  = "Urethane Base (Tinted)";
+      document.getElementById("r1-qty").innerHTML    = Math.ceil(area/120);
+      document.getElementById("r1-q-unit").innerHTML = "gal";
+      document.getElementById("r1-prod").innerHTML   = Math.ceil(area/120);
+      document.getElementById("r1-p-unit").innerHTML = "Kits (Part A and B)";
+      document.getElementById("r2-title").innerHTML  = "Quartz Blend";
+      document.getElementById("r2-qty").innerHTML    = Math.ceil(area*0.75);
+      document.getElementById("r2-q-unit").innerHTML = "lb";
+      document.getElementById("r2-prod").innerHTML   = Math.ceil(Math.ceil(area*0.75)/50);
+      document.getElementById("r2-p-unit").innerHTML = "Bags (50lb) <select id='color1' onChange='this.style.backgroundColor=(this.selectedIndex)?\"white\":\"yellow\";'></select>";
+      document.getElementById("r3-title").innerHTML  = "Urethane Midcoat (Clear)";
+      document.getElementById("r3-qty").innerHTML    = Math.ceil(area/100);
+      document.getElementById("r3-q-unit").innerHTML = "gal";
+      document.getElementById("r3-prod").innerHTML   = Math.ceil(area/100);
+      document.getElementById("r3-p-unit").innerHTML = "Kits (Part A and B)";
+      document.getElementById("r4-title").innerHTML  = "Urethane Topcoat (Clear)";
+      document.getElementById("r4-qty").innerHTML    = Math.ceil(area/100);
+      document.getElementById("r4-q-unit").innerHTML = "gal";
+      document.getElementById("r4-prod").innerHTML   = Math.ceil(area/100);
+      document.getElementById("r4-p-unit").innerHTML = "Kits (Part A and B)";
+      document.getElementById("r5-title").innerHTML  = "";
+      document.getElementById("r5-qty").innerHTML    = "";
+      document.getElementById("r5-q-unit").innerHTML = "";
+      document.getElementById("r5-prod").innerHTML   = "";
+      document.getElementById("r5-p-unit").innerHTML = "";
+      document.getElementById("row5").style.display = "none";
+      document.getElementById("csm-cage").innerHTML = "1";
+      document.getElementById("csm-rol").innerHTML  = "3";
+      document.getElementById("csm-cap").innerHTML  = "4";
+      document.getElementById("csm-br").innerHTML   = "6";
+      document.getElementById("csm-mix").innerHTML  = "1";
+      document.getElementById("csm-sqg").innerHTML  = "1";
+      document.getElementById("csm-glv").innerHTML  = "12";
+      document.getElementById("csm-scr").innerHTML  = "0";
+      document.getElementById("scraperRow").style.display = "none";
+
+      listColors(colorsQuartz, "color1");
+//      document.getElementById("color2").style.display = "none";
+  	  break; // exterior quartz
+  } // switch
+
+//  document.getElementById("emailBtn").href = message;
+
+	document.getElementById("output").style.display = "block";
+	document.getElementById("order").style.display = "block";
+} // function calc()
+
+
+function composeMessage() {
+  var message = "mailto:reitzen@dtsgroup.ca?subject=PowerCOAT Order&body=Hello%2C I'd like to order the following for ";
+
+  switch(document.querySelector("input[name=appType]:checked").value) {
+  	case "decorative":
+  	  message += "a Decorative Chip application:%0D%0A";
+      message += "%0D%0A%0D%0AEpoxy Base: " + Math.ceil(Math.ceil(area/166.667)/3) + " Kits (3 Gallon Kit)";
+      message += "%0D%0A%0D%0AEpoxy Tint: " + Math.ceil(Math.ceil(area/166.667)/3) + " qt";
+  	  message += "%0D%0A%0D%0AEpoxy Tint Color: " + document.getElementById("color1").value;
+      message += "%0D%0A%0D%0AChips: " + (area/10) + " lb";
+   	  message += "%0D%0A%0D%0AChip Color: " + document.getElementById("color2").value;
+      message += "%0D%0A%0D%0APolyaspartic: " + Math.ceil(Math.ceil(area/120)/2) + " Kits (2 Gallon Kit)";
+      message += "%0D%0A";
+      message += "%0D%0A%0D%0ATypical Consumables (adjust quantities as needed)";
+      message += "%0D%0A%0D%0ARoller Cage (18%22): 1";
+      message += "%0D%0A%0D%0ARollers: 2";
+      message += "%0D%0A%0D%0AEnd Caps: 2";
+      message += "%0D%0A%0D%0A2%22 Brush: 4";
+      message += "%0D%0A%0D%0AMixer: 1";
+      message += "%0D%0A%0D%0ASqueegee: 1";
+      message += "%0D%0A%0D%0ANitrile Gloves: 8";
+      message += "%0D%0A%0D%0AScraper: 1";
+      message += "%0D%0A%0D%0A";
+  	  break;
+  	case "epoxy":
+  	  message += "an Epoxy Metallic application:%0D%0A";
+      message += "%0D%0A%0D%0AEpoxy Base: " + Math.ceil(Math.ceil(area/166.667)/3) + " Kits (3 Gallon Kit)"
+      message += "%0D%0A%0D%0AEpoxy Tint: " + Math.ceil(Math.ceil(area/166.667)/3)+ " qt"
+   	  message += "%0D%0A%0D%0AEpoxy Tint Color: " + document.getElementById("color1").value;
+      message += "%0D%0A%0D%0AMetallic Pigments: " + Math.ceil(Math.ceil(area/45)/3) + " 8oz Bottles"
+ 	    message += "%0D%0A%0D%0AMetallic Pigment Color(s): " + Array.from(document.getElementById("color2").options).filter(option => option.selected).map(option => option.value).toString().replace(/,/g,"%2C ");
+      message += "%0D%0A%0D%0ALVX: " + Math.ceil(Math.ceil(area/45)/3) + " Kits (3 Gallon Kit)"
+      message += "%0D%0A%0D%0AUrethane Clearcoat: " + Math.ceil(area/600) + " Kits (Part A and B)"
+      message += "%0D%0A";
+      message += "%0D%0A%0D%0ATypical Consumables (adjust quantities as needed)";
+      message += "%0D%0A%0D%0ARoller Cage (18%22): 1";
+      message += "%0D%0A%0D%0ARollers: 3";
+      message += "%0D%0A%0D%0AEnd Caps: 4";
+      message += "%0D%0A%0D%0A2%22 Brush: 6";
+      message += "%0D%0A%0D%0AMixer: 1";
+      message += "%0D%0A%0D%0ASqueegee: 1";
+      message += "%0D%0A%0D%0ANitrile Gloves: 12";
+      message += "%0D%0A%0D%0A";
+  	  break;
+  	case "quartz":
+  	  message += "an Exterior Quartz on Concrete application:%0D%0A";
+      message += "%0D%0A%0D%0AUrethane Base (Tinted): " + Math.ceil(area/120) + " Kits (Part A and B)"
+      message += "%0D%0A%0D%0AQuartz Blend: " + Math.ceil(Math.ceil(area*0.75)/50) + " Bags (50lb)"
+  	  message += "%0D%0A%0D%0AQuartz Blend: " + document.getElementById("color1").value;
+      message += "%0D%0A%0D%0AUrethane Midcoat (Clear): " + Math.ceil(area/100) + " Kits (Part A and B)"
+      message += "%0D%0A%0D%0AUrethane Topcoat (Clear): " + Math.ceil(area/100) + " Kits (Part A and B)"
+      message += "%0D%0A";
+      message += "%0D%0A%0D%0ATypical Consumables (adjust quantities as needed)";
+      message += "%0D%0A%0D%0ARoller Cage (18%22): 1";
+      message += "%0D%0A%0D%0ARollers: 3";
+      message += "%0D%0A%0D%0AEnd Caps: 4";
+      message += "%0D%0A%0D%0A2%22 Brush: 6";
+      message += "%0D%0A%0D%0AMixer: 1";
+      message += "%0D%0A%0D%0ASqueegee: 1";
+      message += "%0D%0A%0D%0ANitrile Gloves: 12";
+      message += "%0D%0A%0D%0A";
+  	  break;
+  } // switch
+  document.getElementById("emailBtn").href = message;
+} // function composeMessage
+
+</script>
+
+
+</body>
+</html>

@@ -1,0 +1,16 @@
+{
+  "name": "PowerCOAT Materials Calculator",
+  "short_name": "PowerCALC",
+  "start_url": "/PowerCALC/index.html",
+  "display": "standalone",
+  "background_color": "white",
+  "theme_color": "#c21b32",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "favicon.svg",
+      "type": "image/svg+xml",
+      "sizes": "any"
+    }
+  ]
+}
