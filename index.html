@@ -109,14 +109,6 @@
       padding: 0.5em;
     }
   </style>
-
-  <script type="text/javascript">
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker
-      .register('/PowerCALC/sw.js')
-      .then(() => { console.log('Service Worker Registered'); });
-  }
-  </script>
 </head>
 
 
@@ -434,6 +426,14 @@ function composeMessage() {
   } // switch
   document.getElementById("emailBtn").href = message;
 } // function composeMessage
+
+  <script type="text/javascript">
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker
+      .register('/PowerCALC/sw.js')
+      .then(() => { console.log('Service Worker Registered'); });
+  }
+  </script>
 
 </script>
 
