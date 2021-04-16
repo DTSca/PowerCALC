@@ -1,8 +1,4 @@
-const ver = "Version 0.3";
-
-window.onload = function () {
-  document.getElementById('version').innerHTML = ver;
-}
+const ver = 0.3;
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
