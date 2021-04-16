@@ -1,3 +1,9 @@
+const ver = "Version 0.3";
+
+window.onload = function () {
+  document.getElementById('version').innerHTML = ver;
+}
+
 self.addEventListener('install', (e) => {
   e.waitUntil(
     caches.open('PowerCALC').then((cache) => cache.addAll([

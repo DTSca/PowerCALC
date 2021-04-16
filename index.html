@@ -3,7 +3,7 @@
 <head>
   <meta http-equiv="content-type" content="text/html; charset=utf-8" />
   <meta name="description" content="PowerCOAT Calculator" />
-  <meta name="keywords" content="" /> 
+  <meta name="keywords" content="" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="theme-color" content="#c21b32" />
   <link rel="icon" type="image/svg+xml" href="favicon.svg">
@@ -188,7 +188,7 @@
 
 
 <footer>
-  <p style="float: left;">Version 0.3
+  <p style="float: left;" id="version" />
   <p style="float: right;">Copyright &copy; 2021 PowerCOAT Canada
 </footer>
 
@@ -428,13 +428,13 @@ function composeMessage() {
 } // function composeMessage
 
 </script>
-  <script type="text/javascript">
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker
-      .register('/PowerCALC/sw.js')
-      .then(() => { console.log('Service Worker Registered'); });
-  }
-  </script>
+<script type="text/javascript">
+if ('serviceWorker' in navigator) {
+  navigator.serviceWorker
+    .register('./sw.js')
+    .then(() => { console.log('Service Worker Registered'); });
+}
+</script>
 
 
 
