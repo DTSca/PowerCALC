@@ -27,8 +27,6 @@
     }
     header {
       background: white;
-//      background: hsl(353, 72%, 90%);
-//      font-weight: bold;
     }
     header a {
       text-decoration: none;
@@ -40,8 +38,6 @@
       padding: 1em;
     }
     #input {
-//      background: lightsteelblue;
-//      background: hsl(173, 72%, 44%);
       background: black;
       color: white;
     }
@@ -55,8 +51,6 @@
       font-weight: bold;
     }
     #output {
-//      background: lightskyblue;
-//      background: #c21b32;
       background: hsl(352, 76%, 35%);
       color: white;
       display: none;
@@ -91,12 +85,9 @@
     }
     #output select {background-color: yellow;}
     #output select option {background-color: white;}
-//    #output select[selectedIndex="1"] {background-color: yellow;}
     #output select option:first-child {background-color: yellow;}
     #order {
       display: none;
-//      background: lightsteelblue;
-//      background: hsl(353, 72%, 44%);
       background: black;
       color: white;
     }
@@ -109,6 +100,10 @@
     }
     #order table td:first-child {
       text-align: right;
+    }
+    #order input:invalid {
+      background: #FDD;
+      border-color: #900;
     }
     footer {
       font-size: small;
@@ -190,11 +185,11 @@
   <section id="order">
     <table>
       <caption>Shipping Address</caption>
-      <tr><td><label for="name">Name*</label></td>         <td><input name="Name" id="name" type="text" required></td></tr>
-      <tr><td><label for="coName">Company Name</label></td><td><input name="Company Name" id="coName" type="text"></td></tr>
-      <tr><td><label for="addr1">Address1*</label></td>    <td><input name="Address1" id="addr1" type="text" required></td></tr>
-      <tr><td><label for="addr2">Address2</label></td>     <td><input name="Address2" id="addr2" type="text"></td></tr>
-      <tr><td><label for="city">City*</label></td>         <td><input name="City" id="city" type="text" required></td></tr>
+      <tr><td><label for="name">Name*</label></td>         <td><input type="text" maxlength="40" name="Name" id="name" required></td></tr>
+      <tr><td><label for="coName">Company Name</label></td><td><input type="text" maxlength="40" name="Company Name" id="coName"></td></tr>
+      <tr><td><label for="addr1">Address1*</label></td>    <td><input type="text" maxlength="40" name="Address1" id="addr1" required></td></tr>
+      <tr><td><label for="addr2">Address2</label></td>     <td><input type="text" maxlength="40" name="Address2" id="addr2"></td></tr>
+      <tr><td><label for="city">City*</label></td>         <td><input type="text" maxlength="40" name="City" id="city" required></td></tr>
       <tr><td><label for="prov">Prov*</label></td>         <td><select name="Province" id="prov">
         <option value="AB">Alberta</option>
         <option value="BC">British Columbia</option>
@@ -210,11 +205,10 @@
         <option value="SK">Saskatchewan</option>
         <option value="YT">Yukon</option>
         </select></td></tr>
-      <tr><td><label for="zip">Postal Code*</label></td><td><input name="Postal Code" id="zip" type="text" required></td></tr>
-      <tr><td><label for="phone">Phone #*</label></td>  <td><input name="Phone" id="phone" type="tel" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required></td></tr>
+      <tr><td><label for="zip">Postal Code*</label></td><td><input type="text" maxlength="7" name="Postal Code" id="zip" required></td></tr>
+      <tr><td><label for="phone">Phone #*</label></td>  <td><input type="tel" maxlength="12" name="Phone" id="phone" title="123-456-7890" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required></td></tr>
     </table>
-    <input type="hidden" id="body" name=".">
-    <a id="emailBtn" href=""><button onclick="composeMessage()">Request Quote</button></a>
+    <button type="button" onclick="composeMessage()">Request Quote</button>
   </section>
 
 </form>
@@ -222,7 +216,7 @@
 
 
 <footer>
-  <p style="float: left;">Version 0.4
+  <p style="float: left;">Version 0.41
   <p style="float: right;">Copyright &copy; 2021 PowerCOAT Canada
 </footer>
 
@@ -259,7 +253,6 @@ function listColors(list, field) {
 } // function listColors
 
 function calc() {
-//  area = document.querySelector("input[name=area]").value;
   area = document.getElementById("area").value;
 
   if (!area)
@@ -324,7 +317,6 @@ function calc() {
       document.getElementById("r3-q-unit").innerHTML = "oz";
       document.getElementById("r3-prod").innerHTML   = Math.ceil(Math.ceil(area/45)/3);
       document.getElementById("r3-p-unit").innerHTML = "8oz Bottles <select id='color2' title='Hold Ctrl to select multiple' multiple onChange='this.style.backgroundColor=\"yellow\";'></select>";
-//      document.getElementById("r3-p-unit").innerHTML = "8oz Bottles <select id='color2' multiple onChange='this.style.backgroundColor=(this.selectedIndex==\"-1\")?\"white\":\"yellow\";'></select><button onclick=alert(document.getElementById(\"color2\").selectedIndex)>a</button>";
       document.getElementById("r4-title").innerHTML  = "LVX";
       document.getElementById("r4-qty").innerHTML    = Math.ceil(area/45);
       document.getElementById("r4-q-unit").innerHTML = "gal";
@@ -388,11 +380,9 @@ function calc() {
       document.getElementById("scraperRow").style.display = "none";
 
       listColors(colorsQuartz, "color1");
-//      document.getElementById("color2").style.display = "none";
   	  break; // exterior quartz
   } // switch
 
-//  document.getElementById("emailBtn").href = message;
 
 	document.getElementById("output").style.display = "block";
 	document.getElementById("order").style.display = "block";
@@ -400,11 +390,21 @@ function calc() {
 
 
 function composeMessage() {
-  var action = "mailto:terry@powercoatcanada.com,troy@powercoatcanada.com?subject=PowerCOAT Quote Request - " +
-    document.getElementById("name").value;
-  var	message = "%0D%0A%0D%0A***%0D%0AQuantities created by our calculator are recommended values based on industry standards.  Please amend quantities as needed prior to submitting your quote request.%0D%0A***%0D%0A";
+  var action, subject, message;
+  action = "mailto:terry@powercoatcanada.com,troy@powercoatcanada.com";
+  subject = "?subject=PowerCOAT Quote Request - " + encodeURIComponent(document.getElementById("name").value);
+  message = "&body=";
+  message += "Name:"              + encodeURIComponent(document.getElementById("name").value);
+  message += "%0D%0ACompany:"     + encodeURIComponent(document.getElementById("coName").value);
+  message += "%0D%0AAddress1:"    + encodeURIComponent(document.getElementById("addr1").value);
+  message += "%0D%0AAddress2:"    + encodeURIComponent(document.getElementById("addr2").value);
+  message += "%0D%0ACity:"        + encodeURIComponent(document.getElementById("city").value);
+  message += "%0D%0AProvince:"    + encodeURIComponent(document.getElementById("prov").value);
+  message += "%0D%0APostal Code:" + encodeURIComponent(document.getElementById("zip").value);
+  message += "%0D%0APhone:"       + encodeURIComponent(document.getElementById("phone").value);
+ 	message += "%0D%0A%0D%0A***%0D%0AQuantities created by our calculator are recommended values based on industry standards.  Please adjust quantities as needed prior to submitting your quote request.%0D%0A***%0D%0A";
 
-  message += "%0D%0A%0D%0AHello, I'd like to request a quote for a " + area + " sq.ft. ";
+  message += "%0D%0A%0D%0AHello%2C I'd like to request a quote for a " + area + " sq.ft. ";
 
   switch(document.querySelector("input[name=appType]:checked").value) {
   	case "decorative":
@@ -466,9 +466,11 @@ function composeMessage() {
       message += "%0D%0A%0D%0A";
   	  break;
   } // switch
-//  document.getElementById("emailBtn").href = message;
-  document.getElementById("form").action = action;
-  document.getElementById("body").value = message;
+
+  if (document.getElementById('form').reportValidity()) // put up warnings if form errors
+    document.location = action+subject+message;
+  else
+    return false;
 } // function composeMessage
 
 </script>
