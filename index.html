@@ -46,8 +46,7 @@
       color: white;
     }
     #input button,
-    #order button,
-    #order input {
+    #order button {
       margin-left: 1em;
       padding: 0.5em;
       background-color: lightgreen;
@@ -101,8 +100,15 @@
       background: black;
       color: white;
     }
-    #order input {
+    #order table {
+      margin-left: auto;
+      margin-right: auto;
+    }
+    #order table caption {
       font-weight: bold;
+    }
+    #order table td:first-child {
+      text-align: right;
     }
     footer {
       font-size: small;
@@ -120,20 +126,21 @@
 
 
 <main>
+<form id="form" action="" enctype="text/plain" method="POST">
   <section id="input">
     <p style="display: inline-block; text-align: left;">
-      <input type="radio" id="appType-dec" name="appType" value="decorative" checked />
+      <input form="a" type="radio" id="appType-dec" name="appType" value="decorative" checked />
       <label for="appType-dec">Decorative Chip</label><br>
-      <input type="radio" id="appType-epoxy" name="appType" value="epoxy" />
+      <input form="a" type="radio" id="appType-epoxy" name="appType" value="epoxy" />
       <label for="appType-epoxy">Epoxy Metallic</label><br>
-      <input type="radio" id="appType-quartz" name="appType" value="quartz" />
+      <input form="a" type="radio" id="appType-quartz" name="appType" value="quartz" />
       <label for="appType-quartz">Exterior Quartz on Concrete</label>
     </p>
 
     <p>
       <label for="area">Area:</label>
-      <input type="number" id="area" name="area" min="1" max="50000" size="5" /> ft<sup>2</sup>
-      <button onclick="calc()">Go</button>
+      <input type="number" id="area" min="1" max="50000" size="5" required /> ft<sup>2</sup>
+      <button type="button" onclick="calc()">Go</button>
     </p>
   </section>
 
@@ -181,14 +188,41 @@
   </section>
 
   <section id="order">
-    <a id="emailBtn" href=""><button onclick="composeMessage()">Email Order</button></a>
+    <table>
+      <caption>Shipping Address</caption>
+      <tr><td><label for="name">Name*</label></td>         <td><input name="Name" id="name" type="text" required></td></tr>
+      <tr><td><label for="coName">Company Name</label></td><td><input name="Company Name" id="coName" type="text"></td></tr>
+      <tr><td><label for="addr1">Address1*</label></td>    <td><input name="Address1" id="addr1" type="text" required></td></tr>
+      <tr><td><label for="addr2">Address2</label></td>     <td><input name="Address2" id="addr2" type="text"></td></tr>
+      <tr><td><label for="city">City*</label></td>         <td><input name="City" id="city" type="text" required></td></tr>
+      <tr><td><label for="prov">Prov*</label></td>         <td><select name="Province" id="prov">
+        <option value="AB">Alberta</option>
+        <option value="BC">British Columbia</option>
+        <option value="MB">Manitoba</option>
+        <option value="NB">New Brunswick</option>
+        <option value="NL">Newfoundland</option>
+        <option value="NT">Northwest Territories</option>
+        <option value="NS">Nova Scotia</option>
+        <option value="NU">Nunavut</option>
+        <option value="ON">Ontario</option>
+        <option value="PE">Prince Edward Island</option>
+        <option value="QC">Quebec</option>
+        <option value="SK">Saskatchewan</option>
+        <option value="YT">Yukon</option>
+        </select></td></tr>
+      <tr><td><label for="zip">Postal Code*</label></td><td><input name="Postal Code" id="zip" type="text" required></td></tr>
+      <tr><td><label for="phone">Phone #*</label></td>  <td><input name="Phone" id="phone" type="tel" placeholder="123-456-7890" pattern="[0-9]{3}-[0-9]{3}-[0-9]{4}" required></td></tr>
+    </table>
+    <input type="hidden" id="body" name=".">
+    <a id="emailBtn" href=""><button onclick="composeMessage()">Request Quote</button></a>
   </section>
 
+</form>
 </main>
 
 
 <footer>
-  <p style="float: left;">Version 0.3
+  <p style="float: left;">Version 0.4
   <p style="float: right;">Copyright &copy; 2021 PowerCOAT Canada
 </footer>
 
@@ -225,7 +259,11 @@ function listColors(list, field) {
 } // function listColors
 
 function calc() {
-  area = document.querySelector("input[name=area]").value;
+//  area = document.querySelector("input[name=area]").value;
+  area = document.getElementById("area").value;
+
+  if (!area)
+    return;
 
   switch(document.querySelector("input[name=appType]:checked").value) {
   	case "decorative":
@@ -362,11 +400,15 @@ function calc() {
 
 
 function composeMessage() {
-  var message = "mailto:terry@powercoatcanada.com,troy@powercoatcanada.com?subject=PowerCOAT Order&body=Hello%2C I'd like to order the following for ";
+  var action = "mailto:terry@powercoatcanada.com,troy@powercoatcanada.com?subject=PowerCOAT Quote Request - " +
+    document.getElementById("name").value;
+  var	message = "%0D%0A%0D%0A***%0D%0AQuantities created by our calculator are recommended values based on industry standards.  Please amend quantities as needed prior to submitting your quote request.%0D%0A***%0D%0A";
+
+  message += "%0D%0A%0D%0AHello, I'd like to request a quote for a " + area + " sq.ft. ";
 
   switch(document.querySelector("input[name=appType]:checked").value) {
   	case "decorative":
-  	  message += "a Decorative Chip application:%0D%0A";
+  	  message += "Decorative Chip application:%0D%0A";
       message += "%0D%0A%0D%0AEpoxy Base: " + Math.ceil(Math.ceil(area/166.667)/3) + " Kits (3 Gallon Kit)";
       message += "%0D%0A%0D%0AEpoxy Tint: " + Math.ceil(Math.ceil(area/166.667)/3) + " qt";
   	  message += "%0D%0A%0D%0AEpoxy Tint Color: " + document.getElementById("color1").value;
@@ -386,7 +428,7 @@ function composeMessage() {
       message += "%0D%0A%0D%0A";
   	  break;
   	case "epoxy":
-  	  message += "an Epoxy Metallic application:%0D%0A";
+  	  message += "Epoxy Metallic application:%0D%0A";
       message += "%0D%0A%0D%0AEpoxy Base: " + Math.ceil(Math.ceil(area/166.667)/3) + " Kits (3 Gallon Kit)"
       message += "%0D%0A%0D%0AEpoxy Tint: " + Math.ceil(Math.ceil(area/166.667)/3)+ " qt"
    	  message += "%0D%0A%0D%0AEpoxy Tint Color: " + document.getElementById("color1").value;
@@ -406,7 +448,7 @@ function composeMessage() {
       message += "%0D%0A%0D%0A";
   	  break;
   	case "quartz":
-  	  message += "an Exterior Quartz on Concrete application:%0D%0A";
+  	  message += "Exterior Quartz on Concrete application:%0D%0A";
       message += "%0D%0A%0D%0AUrethane Base (Tinted): " + Math.ceil(area/120) + " Kits (Part A and B)"
       message += "%0D%0A%0D%0AQuartz Blend: " + Math.ceil(Math.ceil(area*0.75)/50) + " Bags (50lb)"
   	  message += "%0D%0A%0D%0AQuartz Blend: " + document.getElementById("color1").value;
@@ -424,7 +466,9 @@ function composeMessage() {
       message += "%0D%0A%0D%0A";
   	  break;
   } // switch
-  document.getElementById("emailBtn").href = message;
+//  document.getElementById("emailBtn").href = message;
+  document.getElementById("form").action = action;
+  document.getElementById("body").value = message;
 } // function composeMessage
 
 </script>
