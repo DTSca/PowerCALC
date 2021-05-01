@@ -22,6 +22,7 @@
     }
     body {
       font-family: arial, sans-serif;
+      font-size: large;
       margin: 0;
       text-align: center;
     }
@@ -31,9 +32,6 @@
     header a {
       text-decoration: none;
     }
-    .title {font-size: 10vw; color:white;}
-    .t-power {color: white; font-style: bold;}
-    .t-coat {color: #c21b32; background:white}
     #input, #output, #order {
       padding: 1em;
     }
@@ -41,6 +39,7 @@
       background: black;
       color: white;
     }
+    #input input {font-size: large;}
     #input button,
     #order button {
       margin-left: 1em;
@@ -83,13 +82,14 @@
     #output #consumableTable tr > td:nth-child(2) {
       text-align: right;
     }
-    #output select {background-color: yellow;}
+    #output select {background-color: yellow; margin: 0.5em;}
     #output select option {background-color: white;}
     #output select option:first-child {background-color: yellow;}
     #order {
       display: none;
       background: black;
       color: white;
+      line-height: 2;
     }
     #order table {
       margin-left: auto;
@@ -123,7 +123,7 @@
 <main>
 <form id="form" action="" enctype="text/plain" method="POST">
   <section id="input">
-    <p style="display: inline-block; text-align: left;">
+    <p style="display: inline-block; text-align: left; line-height: 2;">
       <input form="a" type="radio" id="appType-dec" name="appType" value="decorative" checked />
       <label for="appType-dec">Decorative Chip</label><br>
       <input form="a" type="radio" id="appType-epoxy" name="appType" value="epoxy" />
@@ -208,7 +208,7 @@
       <tr><td><label for="zip">Postal Code*</label></td><td><input type="text" maxlength="7" name="Postal Code" id="zip" required></td></tr>
       <tr><td><label for="phone">Phone #*</label></td>  <td><input type="tel" maxlength="14" name="Phone" id="phone" title="123-456-7890" placeholder="123-456-7890" pattern="\(?\d{3}\)?[\s.-]?\d{3}[\s.-]?\d{4}" required></td></tr>
     </table>
-    <button type="button" onclick="composeMessage()">Request Quote</button>
+    <p><button type="button" onclick="composeMessage()">Request Quote</button></p>
   </section>
 
 </form>
@@ -216,7 +216,7 @@
 
 
 <footer>
-  <p style="float: left;">Version 0.42
+  <p style="float: left;">Version 0.43
   <p style="float: right;">Copyright &copy; 2021 PowerCOAT Canada
 </footer>
 
