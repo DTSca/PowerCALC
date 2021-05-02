@@ -1,4 +1,4 @@
-const ver = 0.45;
+const ver = 0.46;
 
 self.addEventListener('install', (e) => {
   e.waitUntil(
