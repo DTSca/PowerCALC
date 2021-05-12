@@ -174,7 +174,7 @@
       <tr><td>End Caps</td>         <td id="csm-cap"></td></tr>
       <tr><td>2" Brush</td>         <td id="csm-br"></td></tr>
       <tr><td>Mixer</td>            <td id="csm-mix"></td></tr>
-      <tr><td>Squeegee</td>         <td id="csm-sqg"></td></tr>
+      <tr><td>Magic Squeegee</td>   <td><select id="csm-sqg" onChange="this.style.backgroundColor=(this.selectedIndex?'white':'yellow');"><option>Size:</option><option>12"</option><option>18"</option><option>22"</option></select></td></tr>
       <tr><td>Nitrile Gloves</td>   <td id="csm-glv"></td></tr>
       <tr id="scraperRow"><td>Scraper</td> <td id="csm-scr"></td></tr>
     </table>
@@ -214,7 +214,7 @@
 
 
 <footer>
-  <p style="float: left;">Version 0.47
+  <p style="float: left;">Version 0.48
   <p style="float: right;">Copyright &copy; 2021 PowerCOAT Canada
 </footer>
 
@@ -290,7 +290,7 @@ function calc() {
       document.getElementById("csm-cap").innerHTML  = "2";
       document.getElementById("csm-br").innerHTML   = "4";
       document.getElementById("csm-mix").innerHTML  = "1";
-      document.getElementById("csm-sqg").innerHTML  = "1";
+//      document.getElementById("csm-sqg").innerHTML  = "1";
       document.getElementById("csm-glv").innerHTML  = "8";
       document.getElementById("csm-scr").innerHTML  = "1";
       document.getElementById("scraperRow").style.display = "table-row";
@@ -331,7 +331,7 @@ function calc() {
       document.getElementById("csm-cap").innerHTML  = "4";
       document.getElementById("csm-br").innerHTML   = "6";
       document.getElementById("csm-mix").innerHTML  = "1";
-      document.getElementById("csm-sqg").innerHTML  = "1";
+//      document.getElementById("csm-sqg").innerHTML  = "1";
       document.getElementById("csm-glv").innerHTML  = "12";
       document.getElementById("csm-scr").innerHTML  = "0";
       document.getElementById("scraperRow").style.display = "none";
@@ -372,7 +372,7 @@ function calc() {
       document.getElementById("csm-cap").innerHTML  = "4";
       document.getElementById("csm-br").innerHTML   = "6";
       document.getElementById("csm-mix").innerHTML  = "1";
-      document.getElementById("csm-sqg").innerHTML  = "1";
+//      document.getElementById("csm-sqg").innerHTML  = "1";
       document.getElementById("csm-glv").innerHTML  = "12";
       document.getElementById("csm-scr").innerHTML  = "0";
       document.getElementById("scraperRow").style.display = "none";
@@ -420,7 +420,7 @@ function composeMessage() {
       message += "%0D%0A%0D%0AEnd Caps: 2";
       message += "%0D%0A%0D%0A2%22 Brush: 4";
       message += "%0D%0A%0D%0AMixer: 1";
-      message += "%0D%0A%0D%0ASqueegee: 1";
+      message += "%0D%0A%0D%0AMagic Squeegee: " + document.getElementById("csm-sqg").value;
       message += "%0D%0A%0D%0ANitrile Gloves: 8";
       message += "%0D%0A%0D%0AScraper: 1";
       message += "%0D%0A%0D%0A";
@@ -441,7 +441,7 @@ function composeMessage() {
       message += "%0D%0A%0D%0AEnd Caps: 4";
       message += "%0D%0A%0D%0A2%22 Brush: 6";
       message += "%0D%0A%0D%0AMixer: 1";
-      message += "%0D%0A%0D%0ASqueegee: 1";
+      message += "%0D%0A%0D%0AMagic Squeegee: " + document.getElementById("csm-sqg").value;
       message += "%0D%0A%0D%0ANitrile Gloves: 12";
       message += "%0D%0A%0D%0A";
   	  break;
@@ -459,7 +459,7 @@ function composeMessage() {
       message += "%0D%0A%0D%0AEnd Caps: 4";
       message += "%0D%0A%0D%0A2%22 Brush: 6";
       message += "%0D%0A%0D%0AMixer: 1";
-      message += "%0D%0A%0D%0ASqueegee: 1";
+      message += "%0D%0A%0D%0AMagic Squeegee: " + document.getElementById("csm-sqg").value;
       message += "%0D%0A%0D%0ANitrile Gloves: 12";
       message += "%0D%0A%0D%0A";
   	  break;
