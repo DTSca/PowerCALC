@@ -129,7 +129,10 @@
       <input form="a" type="radio" id="appType-quartz" name="appType" value="quartz" />
       <label for="appType-quartz">Exterior Quartz on Concrete</label>
     </p>
-
+    <p>
+      <label for="appLocation">Where do you want to use these products? (Garage, basement, deck, etc)</label>
+      <input type="text" maxlength="40" id="appLocation" required />
+    </p>
     <p>
       <label for="area">Area:</label>
       <input type="number" id="area" min="1" max="50000" size="5" required /> ft<sup>2</sup>
@@ -215,7 +218,7 @@
 
 
 <footer>
-  <p style="float: left;">Version 0.49
+  <p style="float: left;">Version 0.50
   <p style="float: right;">Copyright &copy; 2021 PowerCOAT Canada
 </footer>
 
@@ -403,7 +406,9 @@ function composeMessage() {
   message += "%0D%0APhone:"       + encodeURIComponent(document.getElementById("phone").value);
  	message += "%0D%0A%0D%0A***%0D%0AQuantities created by our calculator are recommended values based on industry standards.  Please adjust quantities as needed prior to submitting your quote request.%0D%0A***%0D%0A";
 
-  message += "%0D%0A%0D%0AHello%2C I'd like to request a quote for a " + area + " sq.ft. ";
+  message += "%0D%0A%0D%0AHello%2C I'm working on a "
+    + encodeURIComponent(document.getElementById("appLocation").value)
+    + " and I'd like to request a quote for a " + area + " sq.ft. ";
 
   switch(document.querySelector("input[name=appType]:checked").value) {
   	case "decorative":
