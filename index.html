@@ -53,6 +53,13 @@
       color: white;
       display: none;
     }
+    #output #r3-hint {
+      font-size: small;
+      text-align: right;
+    }
+    @media screen and (max-width: 770px) {
+      #output #r3-hint {display: none;}
+    }
     #output table {
       margin-left: auto;
       margin-right: auto;
@@ -60,7 +67,7 @@
     #output table td {
       text-align: left;
       padding: 0.2em;
-      vertical-align: baseline;
+      vertical-align: bottom;
     }
     #output #productTable tr > td:nth-child(2),
     #output #productTable tr > td:nth-child(4) {
@@ -81,7 +88,7 @@
     #output #consumableTable tr > td:nth-child(2) {
       text-align: right;
     }
-    #output select {background-color: yellow; margin: 0.5em;}
+    #output select {background-color: yellow; delmargin: 0.5em;}
     #output select option {background-color: white;}
     #output select option:first-child {background-color: yellow;}
     #order {
@@ -218,7 +225,7 @@
 
 
 <footer>
-  <p style="float: left;">Version 0.50
+  <p style="float: left;">Version 0.51
   <p style="float: right;">Copyright &copy; 2021 PowerCOAT Canada
 </footer>
 
@@ -318,7 +325,7 @@ function calc() {
       document.getElementById("r3-qty").innerHTML    = Math.ceil(Math.ceil(area/45)/3)*8;
       document.getElementById("r3-q-unit").innerHTML = "oz";
       document.getElementById("r3-prod").innerHTML   = Math.ceil(Math.ceil(area/45)/3);
-      document.getElementById("r3-p-unit").innerHTML = "8oz Bottles <select id='color2' title='Hold Ctrl to select multiple' multiple onChange='this.style.backgroundColor=\"yellow\";'></select>";
+      document.getElementById("r3-p-unit").innerHTML = "<div id='r3-hint'>*Hold Ctrl to select multiple</div>8oz Bottles <select id='color2' title='Hold Ctrl to select multiple' multiple onChange='this.style.backgroundColor=\"yellow\";'></select>";
       document.getElementById("r4-title").innerHTML  = "LVX";
       document.getElementById("r4-qty").innerHTML    = Math.ceil(area/45);
       document.getElementById("r4-q-unit").innerHTML = "gal";
